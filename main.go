@@ -8,13 +8,28 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/natac13/advent-of-code-go/internal/template"
 	"github.com/natac13/advent-of-code-go/internal/utils"
 )
 
 func main() {
 	downloadFlag := flag.Bool("download", false, "Download input file only")
 	partFlag := flag.Int("part", 0, "Run specific part (1 or 2). If not specified, runs both")
+	createFlag := flag.Bool("create", false, "Create new day")
 	flag.Parse()
+
+	if *createFlag {
+		if flag.NArg() != 2 {
+			fmt.Println("Usage: go run main.go -create YEAR DAY")
+			os.Exit(1)
+		}
+		year, day := flag.Arg(0), flag.Arg(1)
+		if err := template.CreateNewDay(year, day); err != nil {
+			fmt.Printf("Error creating new day: %v\n", err)
+			os.Exit(1)
+		}
+		return
+	}
 
 	if len(flag.Args()) < 2 {
 		fmt.Println("Usage: go run main.go [-part 1|2] [-download] <year> <day>")

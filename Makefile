@@ -16,13 +16,7 @@ new:
 		echo "Usage: make new year=YYYY day=D"; \
 		exit 1; \
 	fi
-	@mkdir -p $(year)/day$(day)
-	@if [ ! -f $(year)/day$(day)/main.go ]; then \
-		echo 'package main\n\nfunc Part1(input []string) int {\n\treturn 0\n}\n\nfunc Part2(input []string) int {\n\treturn 0\n}' > $(year)/day$(day)/main.go; \
-	fi
-	@if [ ! -f $(year)/day$(day)/main_test.go ]; then \
-		echo 'package main\n\nimport (\n\t"strings"\n\t"testing"\n)\n\nvar example = `input here`\n\nfunc TestPart1(t *testing.T) {\n\twant := 0\n\tgot := Part1(parseInput(example))\n\tif got != want {\n\t\tt.Errorf("Part1() = %v, want %v", got, want)\n\t}\n}\n\nfunc TestPart2(t *testing.T) {\n\twant := 0\n\tgot := Part2(parseInput(example))\n\tif got != want {\n\t\tt.Errorf("Part2() = %v, want %v", got, want)\n\t}\n}\n\nfunc parseInput(input string) []string {\n\treturn strings.Split(strings.TrimSpace(input), "\n")\n}' > $(year)/day$(day)/main_test.go; \
-	fi
+	@go run -mod=mod main.go -create $(year) $(day)
 	@make download-input year=$(year) day=$(day)
 
 download-input:
